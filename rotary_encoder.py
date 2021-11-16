@@ -1,42 +1,28 @@
-from machine import PIN
+from RPi import GPIO
+from time import sleep
 
-DATA 7
-CLOCK 2
+def detect(up_val,down_val):
+    while ( (nr := GPIO.input(clk) << 1 | GPIO.input(dta)) not in(up_val,down_vaa
+l)):
+      pass
+    if nr == up_val:
+       return("Up")
+    return("down")
 
-def setup() 
-  clk_in = Pin(CLOCK, Pin.IN, Pin.PULL_DOWN)
-  data_in = Pin(DATA, Pin.IN, Pin.PULL_DOWN)
-
-
-prevNextCode = 0;
-store=0;
-
-void loop() {
-c,val = 0
-  if( val=read_rotary() ) 
-      c +=val
-      if ( prevNextCode==0x0b) 
-         print("eleven ")
-         print("{} {}".format(store))
-      
-
-      if (prevNextCode==0x07) 
-         print("seven ")
-         print(store)
-
-def read_rotary() 
-  rot_enc_table = [0,1,1,0,1,0,0,1,1,0,0,1,0,1,1,0]
-  prevNextCode <<= 2
-  if (digitalRead(DATA))
-    prevNextCode |= 0x02
-  if (digitalRead(CLK))
-    prevNextCode |= 0x01
-  prevNextCode &= 0x0f
-  if  (rot_enc_table[prevNextCode] ) 
-    store <<= 4
-    store |= prevNextCode;
-    if ((store&0xff)==0x2b)
-      return -1
-    if ((store&0xff)==0x17)
-      return 1
-  return 0
+clk = 17
+dta = 18
+GPIO.setmode(GPIO.BCM)
+GPIO.setup(clk, GPIO.IN, pull_up_down=GPIO.PUD_DOWN)
+GPIO.setup(dta, GPIO.IN, pull_up_down=GPIO.PUD_DOWN)
+old_result = 0
+while True:
+  pr = GPIO.input(clk) << 1 | GPIO.input(dta)
+  if(pr == 3):
+    print(detect(2,1))
+  elif(pr == 2):
+    print(detect(0,3))
+  elif(pr==0):
+    print(detect(1,2))
+  elif(pr==1):
+    print(detect(3,0) )
+  sleep(0.1)
