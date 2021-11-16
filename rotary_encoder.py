@@ -2,8 +2,7 @@ from RPi import GPIO
 from time import sleep
 
 def detect(up_val,down_val):
-    while ( (nr := GPIO.input(clk) << 1 | GPIO.input(dta)) not in(up_val,down_vaa
-l)):
+    while ( (nr := GPIO.input(clk) << 1 | GPIO.input(dta)) not in(up_val,down_val)):
       pass
     if nr == up_val:
        return("Up")
